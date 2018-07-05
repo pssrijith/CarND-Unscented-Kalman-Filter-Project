@@ -32,7 +32,7 @@ public:
   MatrixXd Xsig_pred_;
 
   ///* time when the state is true, in us
-  long long time_us_;
+  long long previous_timestamp_;
 
   ///* Process noise standard deviation longitudinal acceleration in m/s^2
   double std_a_;
@@ -67,6 +67,17 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  // Laser measurement noise covariance
+  MatrixXd R_laser_;
+
+  // Radar measurement noise covariance
+  MatrixXd R_radar_;
+
+  // Consistency check parameters (Normalized Innovation Score - NIS)
+  // NIS laser
+  double NIS_laser_;
+  // NIS radar
+  double NIS_radar_;
 
   /**
    * Constructor
@@ -83,6 +94,11 @@ public:
    * @param meas_package The latest measurement data of either radar or laser
    */
   void ProcessMeasurement(MeasurementPackage meas_package);
+  /**
+   * InitializeState - method to do the first initialization
+   * @param meas_package The latest measurement data of either radar or laser
+   */
+  void InitializeState(MeasurementPackage meas_package);
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
